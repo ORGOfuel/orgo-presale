@@ -1,0 +1,43 @@
+# ORGO presale — Netlify configuration
+# Static front end (public/) + one serverless function (netlify/functions/waitlist.mjs).
+# No build step: Netlify serves public/ as-is.
+
+[build]
+  publish = "public"
+  functions = "netlify/functions"
+  command = ""
+
+[functions]
+  node_bundler = "esbuild"
+
+# security + sensible defaults for every page
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "SAMEORIGIN"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+# 3D pouches: large, rarely change → cache for a day, served with the right type
+[[headers]]
+  for = "/models/*"
+  [headers.values]
+    Content-Type = "model/gltf-binary"
+    Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"
+
+[[headers]]
+  for = "/posters/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, stale-while-revalidate=86400"
+
+# config.js holds the store connection — always fetch the latest
+[[headers]]
+  for = "/assets/js/config.js"
+  [headers.values]
+    Cache-Control = "no-cache"
