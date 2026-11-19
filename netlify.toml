@@ -31,10 +31,27 @@
   [headers.values]
     Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"
 
+# images: cache for an hour
 [[headers]]
-  for = "/assets/*"
+  for = "/assets/img/*"
   [headers.values]
     Cache-Control = "public, max-age=3600, stale-while-revalidate=86400"
+
+[[headers]]
+  for = "/assets/boxes/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, stale-while-revalidate=86400"
+
+# styles + scripts: always check for the newest version, so a fresh deploy shows up right away
+[[headers]]
+  for = "/assets/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/assets/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 # config.js holds the store connection — always fetch the latest
 [[headers]]
