@@ -456,3 +456,7 @@ input.is-bad, select.is-bad, textarea.is-bad { border-color: #e5484d !important;
 /* stock-up cards: price + subscription note wrapper stays layout-neutral */
 .pk-info .pk-pw { display: contents; }
 
+/* flavor story: pouch + trail fade in together once the 3D pouch has loaded (no blurry first frame) */
+#spWrap { opacity: 0; transition: opacity .6s var(--ease, ease); }
+#spWrap.mv-ready { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { #spWrap { transition: none; } }

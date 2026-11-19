@@ -196,10 +196,14 @@ function countUp(now) {
 const story = $('#story');
 // order of flavours in the scrolling section
 const SF = ['lemonade', 'blood-orange', 'wild-berries', 'blue-pomegranate'].map(id => F.find(f => f.id === id));
-$('#storyPouch').outerHTML = `<div id="storyPouch" class="mv-story">${SF.map((f, i) => mvHTML(f, i ? '' : 'on', 'disable-zoom disable-pan interaction-prompt="none"')).join('')}</div>`;
+// no flat poster here: it showed up blurry for a second before the 3D pouch took over. The section fades in once the 3D pouch is ready.
+$('#storyPouch').outerHTML = `<div id="storyPouch" class="mv-story">${SF.map((f, i) => mvHTML(f, i ? '' : 'on', 'disable-zoom disable-pan interaction-prompt="none" loading="eager"').replace(/ poster="[^"]*"/, '')).join('')}</div>`;
 const sp = $('#storyPouch');
 const spMV = $$('model-viewer', sp);
 const spWrap = $('#spWrap');
+{ const showStory = () => spWrap.classList.add('mv-ready');
+  if (spMV[0].loaded) showStory(); else spMV[0].addEventListener('load', showStory, { once: true });
+  setTimeout(showStory, 6000); }
 const GN = innerWidth <= 820 ? 4 : 5;
 spWrap.insertAdjacentHTML('afterbegin', Array.from({ length: GN }, (_, k) => `<span class="ghost" data-k="${k + 1}" style="opacity:${(.34 - k * .06).toFixed(2)};filter:blur(${(k * 1.3 + 1.2).toFixed(1)}px) saturate(.75)"></span>`).join(''));
 const ghosts = $$('.ghost', spWrap);
