@@ -53,7 +53,7 @@ window.ORGO_CONFIG = {
      Shopify-hosted customer accounts (order status, preorder tracking). Find it in Shopify admin →
      Settings → Customer accounts (looks like https://shopify.com/<shop-id>/account). Empty = the account icon
      shows "Accounts open soon". */
-  customerAccountUrl: '',
+  customerAccountUrl: 'https://shopify.com/96800375085/account',
 
   /* ---------- Subscription management ----------
      The "Your subscription" card on the Profile page. Paste the customer portal link of the subscription app

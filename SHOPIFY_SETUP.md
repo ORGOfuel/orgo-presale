@@ -17,11 +17,11 @@ Create these 5 products. The **handle** (the URL slug, under "Search engine list
 
 | Flavor | Handle |
 |---|---|
-| Wild Berries | `orgo-wild-berries` |
-| Blood Orange | `orgo-blood-orange` |
-| Blue Pomegranate | `orgo-blue-pomegranate` |
-| Lemonade | `orgo-lemonade` |
-| Variety pack | `orgo-variety` |
+| Wild Berries | `wild-berries` |
+| Blood Orange | `blood-orange` |
+| Blue Pomegranate | `blue-pomegranate` |
+| Lemonade | `lemonade` |
+| Variety Pack | `variety-pack` |
 
 Give each product one option called **Pack size**, with the values **12** and **24** (e.g. "12-pack", "24-pack"; the site looks for the number). Prices set here replace the prices on the site automatically; the site reads them from the Lemonade product (`priceSourceProduct`).
 
