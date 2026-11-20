@@ -41,10 +41,10 @@ window.ORGO_CONFIG = {
 
   /* ---------- Presale ---------- */
   presale: {
-    // When the drop happens (the countdown counts down to this moment). 12:00 AM Eastern on December 20, 2026.
-    launchAt: '2026-12-20T00:00:00-05:00',
-    dropLabel: '12.20',
-    shipNote: 'Ships December 20',          // shown on product page, cart and attached to every order line
+    // When the drop happens (the countdown counts down to this moment). 12:00 AM Eastern on December 29, 2026.
+    launchAt: '2026-12-29T00:00:00-05:00',
+    dropLabel: '12.29',
+    shipNote: 'Ships December 29',          // shown on product page, cart and attached to every order line
     // Hero background photo. Leave empty to show the placeholder; set to e.g. 'assets/img/hero.jpg' once you have it.
     heroImage: ''
   },
@@ -61,7 +61,7 @@ window.ORGO_CONFIG = {
      Recharge / Skio / Loop: their customer portal link). With it, Change flavor or size, Change timing and
      Cancel open the real subscription in Shopify. Empty = falls back to customerAccountUrl; if both are
      empty (preview), changes are saved on this device only. */
-  subscriptionPortalUrl: '',
+  subscriptionPortalUrl: 'https://shopify.com/96800375085/account/pages/39847321-8f67-47af-86b8-dd623b8e9d8e',
 
   /* ---------- Shopify sign-in on the Profile page (Customer Account API) ----------
      Shopify admin → Sales channels → Headless → your storefront → Customer Account API:
@@ -69,7 +69,7 @@ window.ORGO_CONFIG = {
      shopper's Shopify account and shows/updates their real details, orders and tracking.
      Empty = profile is kept on the shopper's device only. See SHOPIFY_SETUP.md. */
   customerAccount: {
-    clientId: '',
+    clientId: 'fe5d1da9-7256-43bf-8864-7767abc68f82',
     redirectUri: '',   // blank = this site's home URL (must also be added as a Callback URI in Shopify)
   },
 

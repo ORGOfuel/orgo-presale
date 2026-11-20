@@ -9,11 +9,11 @@
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const launch = new Date(P.launchAt || '2026-12-20T00:00:00-05:00').getTime();
+  const launch = new Date(P.launchAt || '2026-12-29T00:00:00-05:00').getTime();
 
   // labels from config
-  $$('[data-drop-label]').forEach(e => { e.textContent = P.dropLabel || '12.20'; });
-  $$('[data-ship-note]').forEach(e => { e.textContent = P.shipNote || 'Ships December 20'; });
+  $$('[data-drop-label]').forEach(e => { e.textContent = P.dropLabel || '12.29'; });
+  $$('[data-ship-note]').forEach(e => { e.textContent = P.shipNote || 'Ships December 29'; });
 
   // hero photo (placeholder until config.presale.heroImage is set)
   const ph = $('#heroPhoto');
@@ -25,7 +25,7 @@
 
   // sticker: text around a circle
   const st = $('#psSticker textPath');
-  if (st) st.textContent = st.textContent.replace(/\{drop\}/g, P.dropLabel || '12.20');
+  if (st) st.textContent = st.textContent.replace(/\{drop\}/g, P.dropLabel || '12.29');
 
   // marquee: duplicate the run so the loop is seamless
   const mq = $('.ps-mq-track');

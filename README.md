@@ -1,6 +1,6 @@
 # ORGO Performance Shot — Presale site
 
-The presale ("coming soon, drops 12.20") version of the ORGO site. It is a static front end deployed on Netlify, with Shopify as the back end for products, prices, checkout, payment, orders and customers.
+The presale ("coming soon, drops 12.29") version of the ORGO site. It is a static front end deployed on Netlify, with Shopify as the back end for products, prices, checkout, payment, orders and customers.
 
 ## Folder map
 

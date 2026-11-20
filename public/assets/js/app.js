@@ -22,7 +22,7 @@ const SUBP = { 12: 34.99, 24: 46.99 };
 const PRESALE_PCT = 10, SUB_PCT = 15;
 const subPct = () => SUB_PCT;
 const pctMax = () => SUB_PCT;
-const PRESALE_TAG = 'Presale price · ends 12.20';
+const PRESALE_TAG = 'Presale price · ends 12.29';
 // Every price or "save X%" shown in plain text follows the real prices (which the admin can change)
 function fillPrices() {
   const put = (sel, v) => $$(sel).forEach(e => { e.textContent = v; });
@@ -373,7 +373,7 @@ function renderPDP(id) {
       <div class="buyrow">
         <div class="qty"><button data-q="-1" aria-label="Fewer">−</button><output class="num">${pd.qty}</output><button data-q="1" aria-label="More">+</button></div>
         <button class="btn btn-ink" id="pdpAdd">Preorder · ${money(now)}</button>
-      </div>${pd.sub ? `<p class="ar-note">Auto-renews: you pay ${money(PRICE[pd.size] * pd.qty)} today for box 1, then ${money(SUBP[pd.size] * pd.qty)} every ${pd.cad} weeks, counted from your order date, until you cancel. Change or cancel any time from your account before your next renewal.</p>` : ''}
+      </div>${pd.sub ? `<p class="ar-note">Auto-renews: you pay ${money(PRICE[pd.size] * pd.qty)} today for box 1, then ${money(SUBP[pd.size] * pd.qty)} every ${pd.cad} weeks, counted from when your first box ships, until you cancel. Change or cancel any time from your account before your next renewal.</p>` : ''}
       <dl class="specs" style="margin:0">
         <div><span>Volume</span><span>20 mL / pouch</span></div>
         <div><span>Pouch</span><span>4 mm flat · tear notch</span></div>
@@ -446,7 +446,7 @@ function buildSubStatic() {
       ${t[5] ? `<img class="tile-img" src="${t[5]}" alt="${t[6] || ''}" loading="lazy">` : t[0] === 'deliv' ? '' : '<span class="img-tag">IMAGE PLACEHOLDER</span>'}
       ${t[4].map((p, k) => `<div class="tp" style="--l:${p[0]};--t:${p[1]};--r:${p[2]};--pw:${p[3]}"><div class="floaty" style="--d:${-k * 1.7}s">${pouchHTML(F[p[4]], 'idle')}</div></div>`).join('')}
       <div class="tile-cap"><h3>${t[1]}</h3><p>${t[2]}</p></div></div>`).join('');
-  const flow = [['Pick a box', '12 or 24 pouches. Variety or one favorite flavor.'], ['Pick your timing', 'Every 4 or 6 weeks, counted from the day you order.'], ['It ships free', 'We\'ll update you before each box ships.'], ['Adjust any time', 'Change flavor, size or timing, or cancel online.']];
+  const flow = [['Pick a box', '12 or 24 pouches. Variety or one favorite flavor.'], ['Pick your timing', 'Every 4 or 6 weeks, counted from when your first box ships.'], ['It ships free', 'We\'ll update you before each box ships.'], ['Adjust any time', 'Change flavor, size or timing, or cancel online.']];
   $('#flow').innerHTML = flow.map((f, i) => `<div style="--fa:${F[i].a};--fb:${F[i].b}"><span class="n">${i + 1}</span><h3>${f[0]}</h3><p>${f[1]}</p></div>`).join('');
   $$('[data-jump]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); $('#plans').scrollIntoView({ behavior: 'smooth', block: 'start' }); }));
 }
@@ -469,7 +469,7 @@ function renderSub() {
         <div class="po-seg" role="group" aria-label="Delivery interval">${CAD.map(c => `<button type="button" class="${c === sel.c ? 'on' : ''}" data-pc="${n}:${c}">Every ${c} wk</button>`).join('')}</div>
       </div>
       <button class="btn ${best ? 'btn-w' : 'btn-dark'}" data-plan="${n}">Claim my box</button>
-      <p class="pm-fine">First box ships Dec 20 · then auto-renews at ${money(SUBP[n])} every ${sel.c} weeks until you cancel · cancel any time · <a href="#flavor-${sel.f}">or ${money(PRICE[n])} one-time</a></p>
+      <p class="pm-fine">First box ships Dec 29 · then auto-renews at ${money(SUBP[n])} every ${sel.c} weeks until you cancel · cancel any time · <a href="#flavor-${sel.f}">or ${money(PRICE[n])} one-time</a></p>
     </div>`; }).join('');
   sbCad = sbSel[24].c;
   const y = n => money((REG[n] - SUBP[n]) * 52 / sbCad);
@@ -601,7 +601,7 @@ function renderCart() {
       <div class="tot"><span>Total</span><span>${money(sub + ship)}</span></div>
       <button class="btn btn-ink" id="checkout">Claim my preorder</button>
       <p class="note" id="coNote">${ship ? `Add ${money(60 - sub)} more for free shipping.` : `Free shipping on every preorder · you save ${money(cart.reduce((a, l) => a + REG[l.size] * l.qty, 0) - sub)}`}</p>
-      ${cart.some(l => l.sub) ? `<p class="ar-note ar-cart">By checking out with a subscription, you agree it auto-renews: you'll be charged the price shown above on the schedule you picked, counted from your order date, until you cancel. Cancel any time from your account before your next renewal.</p>` : ''}
+      ${cart.some(l => l.sub) ? `<p class="ar-note ar-cart">By checking out with a subscription, you agree it auto-renews: you'll be charged the price shown above on the schedule you picked, counted from when your first box ships, until you cancel. Cancel any time from your account before your next renewal.</p>` : ''}
       <p class="ps-cart-note"><b>Preorder · ${SHIP_NOTE}.</b> Secure checkout by Shopify. Final shipping &amp; tax at checkout.</p>`;
     $('#checkout').onclick = e => startCheckout(e.currentTarget);
   }
@@ -638,7 +638,7 @@ $('#news').addEventListener('submit', async e => {
   try {
     const r = await fetch(ep, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, sms, phone: sms ? phone : '', source: 'footer', company: ($('[name="company"]', f) || {}).value || '' }) });
     const d = await r.json().catch(() => ({}));
-    if (r.ok && d.ok) { toast('You’re on the list for the 12.20 drop'); f.reset(); $('#smsBox').hidden = true; }
+    if (r.ok && d.ok) { toast('You’re on the list for the 12.29 drop'); f.reset(); $('#smsBox').hidden = true; }
     else toast(d.error === 'email' ? 'Check your email address' : 'Couldn’t sign you up just now. Try again soon.');
   } catch (err) { toast('Couldn’t sign you up just now. Try again soon.'); }
   btn.disabled = false;
@@ -673,7 +673,8 @@ const PERSONA = {
 const STEPS = [['Confirmed', 'cart'], ['On its way', 'truck'], ['Out for delivery', 'pin'], ['Delivered', 'home']];
 const DONE = STEPS.length - 1;
 const fmtD = (iso, o = { month: 'short', day: 'numeric', year: 'numeric' }) => new Date(iso + 'T12:00:00').toLocaleDateString('en-US', o);
-const isoPlus = d => { const t = new Date(); t.setDate(t.getDate() + d); return t.toISOString().slice(0, 10); };
+const localISO = t => `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, '0')}-${String(t.getDate()).padStart(2, '0')}`;   // local calendar date, not UTC
+const isoPlus = d => { const t = new Date(); t.setDate(t.getDate() + d); return localISO(t); };
 const totalLogs = () => prof ? Object.values(prof.logs).reduce((a, b) => a + b, 0) : 0;
 const orderTotal = o => o.total != null ? o.total : o.items.reduce((a, l) => a + linePrice(l), 0);
 function demoProfile() {
@@ -775,7 +776,7 @@ function renderProfile() {
   const cur = prof.orders.find(o => o.step < DONE);
   const itemsHTML = o => o.items.map(l => { const f = byId(l.flavor); return `<div class="oitem" style="--fa:${f.a};--fb:${f.b}"><span class="oi-pouch">${pouchHTML(f)}</span><span>${f.name} · ${l.size}${l.qty > 1 ? ` × ${l.qty}` : ''}${l.sub ? ` · every ${l.cad} wk` : ''}</span><span>${money(linePrice(l))}</span></div>`; }).join('');
   const A = prof.addr || {};
-  const addrHTML = A.street ? `${prof.name}<br>${A.street}<br>${A.city}, ${A.state} ${A.zip}` : '<span style="color:#c2185b">No address yet. Add one below.</span>';
+  const addrHTML = A.street ? `${prof.name}<br>${A.street}<br>${A.city}, ${A.state} ${A.zip}` : (cur && cur.shopify ? 'The address you entered at checkout' : '<span style="color:#c2185b">No address yet. Add one below.</span>');
   if (cur) {
     const tw = (cur.step / DONE * 75).toFixed(1) + '%';
     const shipped = cur.step > 0, etaD = shipped && cur.eta ? cur.eta : (cur.ship || SHIP_DATE);
@@ -789,7 +790,7 @@ function renderProfile() {
       <div class="order-cols">
         <div><span class="eyebrow">Items</span>${itemsHTML(cur)}</div>
         <div><span class="eyebrow">Shipping to</span><p>${addrHTML}</p></div>
-        <div><span class="eyebrow">Delivery</span><p>Free standard shipping<br>${hasSub ? `Subscription · repeats from ${fmtD(cur.ship || cur.date, { month: 'short', day: 'numeric' })}` : cur.ship ? 'One-time preorder' : 'One-time order'}</p></div>
+        <div><span class="eyebrow">Delivery</span><p>Free standard shipping<br>${hasSub ? `Subscription · every ${(cur.items.find(l => l.sub) || {}).cad || 4} weeks after your first box` : cur.ship ? 'One-time preorder' : 'One-time order'}</p></div>
       </div>
       <div class="order-acts">${hasSub ? '<button class="btn btn-ghost" type="button" data-oact="manage">Manage subscription</button>' : ''}<button class="btn btn-ghost" type="button" data-oact="track">Track package</button></div>
     </div>`;
@@ -805,6 +806,7 @@ function renderProfile() {
   renderMySub();
   // real tracking + subscription management live in the Shopify customer account (config.js → customerAccountUrl)
   $$('[data-oact]').forEach(b => b.onclick = () => { if (b.dataset.oact === 'track' && cur && cur.trackingUrl) { window.open(cur.trackingUrl, '_blank', 'noopener'); return; }
+    if (b.dataset.oact === 'manage' && SUB_PORTAL()) { location.href = SUB_PORTAL(); return; }
     if (CFG.customerAccountUrl) { location.href = CFG.customerAccountUrl; return; }
     toast(b.dataset.oact === 'manage' ? 'Subscription settings open once the store is live' : `Tracking appears here once your box ships on ${fmtD(cur && cur.ship || isoPlus(0), { month: 'short', day: 'numeric' })}`); });
   $$('[data-reorder]').forEach(b => b.onclick = () => { const o = prof.orders.find(x => x.id === b.dataset.reorder); o.items.forEach(l => addLine({ flavor: l.flavor, size: l.size, sub: false, qty: l.qty })); openCart(); });
@@ -855,15 +857,20 @@ setupSqueeze();
 const SUB_PORTAL = () => CFG.subscriptionPortalUrl || CFG.customerAccountUrl || '';
 function subState() {
   if (!prof) return null;
+  if (prof.shopify && 'sub' in prof) return prof.sub ? { start: SHIP_DATE, ...prof.sub } : null;   // live from Shopify
   if (prof.sub) return prof.sub;
   const o = [...(prof.orders || [])].reverse().find(x => x.items.some(l => l.sub)); if (!o) return null;
   const l = o.items.find(x => x.sub);
-  return { flavor: l.flavor, size: l.size, cad: l.cad || 4, start: o.ship || SHIP_DATE, status: 'active' };
+  return { flavor: l.flavor, size: l.size, cad: l.cad || 4, start: o.ship || SHIP_DATE, ordered: o.date, status: 'active' };
 }
+/* Box 1 ships on the presale date; renewals run every N weeks counted from that ship date
+   (presale subscriptions are rescheduled in Seal to match). */
 function nextBox(sb) {
-  const today = isoPlus(0); const d = new Date(sb.start + 'T12:00:00');
-  while (d.toISOString().slice(0, 10) < today) d.setDate(d.getDate() + sb.cad * 7);
-  return d.toISOString().slice(0, 10);
+  const today = isoPlus(0);
+  if (sb.next) return sb.next < sb.start ? sb.start : sb.next;   // real next charge date from Shopify
+  let n = sb.start;
+  while (n < today) n = plusDays(n, sb.cad * 7);
+  return n;
 }
 let subEditing = false;
 function renderMySub() {
@@ -877,7 +884,7 @@ function renderMySub() {
   const nb = nextBox(sb);
   box.innerHTML = `<div class="subc" style="--fa:${f.a};--fb:${f.b}">
       <div class="subc-vis">${pouchHTML(f, 'idle')}</div>
-      <div class="subc-main"><span class="subc-pill">Active · ${SUB_PCT}% off from box 2</span><h3>${name} · ${sb.size} pouches</h3>
+      <div class="subc-main"><span class="subc-pill">${sb.status === 'paused' ? 'Paused' : 'Active'} · ${SUB_PCT}% off from box 2</span><h3>${name} · ${sb.size} pouches</h3>
         <p>Every ${sb.cad} weeks · next box <b>${fmtD(nb, { month: 'long', day: 'numeric' })}</b> · <b>${money(nb === sb.start && !sb.shippedFirst ? PRICE[sb.size] : SUBP[sb.size])}</b> <s>${money(REG[sb.size])}</s>${nb === sb.start && !sb.shippedFirst ? ` <span class="subc-then">then ${money(SUBP[sb.size])} from box 2</span>` : ''}</p></div>
       <div class="subc-acts"><button type="button" class="btn btn-ghost" data-subact="edit">Change flavor or size</button><button type="button" class="btn btn-ghost" data-subact="timing">Change timing</button><button type="button" class="subc-cancel" data-subact="cancel">Cancel subscription</button></div>
     </div>
@@ -1057,7 +1064,7 @@ function placeOrder() {
 let lastOrderId = null;
 try { lastOrderId = sessionStorage.getItem('orgo-last-order'); } catch (e) {}
 let tyOrder = null;
-const TY_LINES = ['You just fueled your next PR.', 'You’re in the first drop.', 'Training partner: secured.', 'Tear. Squeeze. Go. Soon.', 'Ships December 20. Get ready.'];
+const TY_LINES = ['You just fueled your next PR.', 'You’re in the first drop.', 'Training partner: secured.', 'Tear. Squeeze. Go. Soon.', 'Ships December 29. Get ready.'];
 let tyTimer = null;
 function sampleOrder() {
   return { id: 'ORG-10642', date: isoPlus(0), eta: isoPlus(5), email: 'you@email.com', sample: true,
@@ -1092,8 +1099,8 @@ function renderThanks() {
   $('#tySum').innerHTML = `<div><span>Subtotal</span><span>${money(full)}</span></div>
     ${full - paid > 0.004 ? `<div class="save"><span>Presale savings</span><span>−${money(full - paid)}</span></div>` : ''}
     <div><span>Shipping</span><span>${ship ? money(ship) : 'Free'}</span></div>
-    <div><span>Tax</span><span>Calculated at payment</span></div>
-    <div class="tot"><span>Total paid</span><span>${money(paid + ship)}</span></div>`;
+    <div class="tot"><span>Total before tax</span><span>${money(paid + ship)}</span></div>
+    <div><span>Tax</span><span>Shown on your receipt</span></div>`;
   $('#tyEta').textContent = fmtD(o.ship || o.eta, { weekday: 'long', month: 'short', day: 'numeric' });
   $('#tyTrack').innerHTML = STEPS.map(s => s[0]).map((t, k) => `<div class="${k === 0 ? 'on' : ''}"><i></i>${t}</div>`).join('');
   const S = o.shipping || {};
@@ -1101,8 +1108,8 @@ function renderThanks() {
   $('#tyPay').innerHTML = o.payment ? `${o.payment.brand} ending in ${o.payment.last4}` : 'Paid securely on checkout';
   const subLine = o.items.find(l => l.sub);
   $('#tySub').hidden = !subLine;
-  if (subLine) { const firstShip = o.ship || SHIP_DATE; const nd = new Date(firstShip + 'T12:00:00'); nd.setDate(nd.getDate() + subLine.cad * 7);
-    $('#tySub').innerHTML = `<span class="eyebrow">You're subscribed</span><b>First box ships ${fmtD(firstShip, { month: 'long', day: 'numeric' })}, the next one ${nd.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}.</b><p>Smart call. Your first box ships at the presale price, and from box 2 you get our best price, ${SUB_PCT}% off every box, for as long as you stay. Change or cancel whenever you want.</p>`; }
+  if (subLine) { const firstShip = o.ship || SHIP_DATE; const nd = plusDays(firstShip, subLine.cad * 7);
+    $('#tySub').innerHTML = `<span class="eyebrow">You're subscribed</span><b>First box ships ${fmtD(firstShip, { month: 'long', day: 'numeric' })}, the next one ${fmtD(nd, { month: 'long', day: 'numeric' })}.</b><p>Smart call. Your first box ships at the presale price, and from box 2 you get our best price, ${SUB_PCT}% off every box, for as long as you stay. Change or cancel whenever you want.</p>`; }
   // drop animation pouches
   $('#tyDrop').innerHTML = F.concat(F).map((f, k) => `<div class="dp" style="--x:${22 + (k * 9) % 56}%;--r:${(k % 2 ? 1 : -1) * (10 + k * 4)}deg;--d:${.2 + k * .09}s;--w2:${46 + (k % 3) * 8}px">${pouchHTML(f)}</div>`).join('');
   $('#tyBox').innerHTML = '<img class="ty-box-img" src="assets/img/products/variety-24-cutout.webp?v=3" alt="ORGO Variety 24-pack box with all four flavors">';
@@ -1161,12 +1168,12 @@ $$('[data-social]').forEach(a => {
    Shopify's hosted checkout. The old in-browser profile/order prototype (placeOrder, renderProfile, renderThanks)
    is kept in this file for the official launch but is not reachable in the presale build. */
 const CFG = window.ORGO_CONFIG || {};
-const SHIP_NOTE = (CFG.presale && CFG.presale.shipNote) || 'Ships December 20';
-const DROP = (CFG.presale && CFG.presale.dropLabel) || '12.20';
+const SHIP_NOTE = (CFG.presale && CFG.presale.shipNote) || 'Ships December 29';
+const DROP = (CFG.presale && CFG.presale.dropLabel) || '12.29';
 let curPid = null;
 // ---- presale orders: recorded on this device so the profile can show tracking + history ----
-const SHIP_DATE = ((CFG.presale && CFG.presale.launchAt) || '2026-12-20').slice(0, 10);
-const plusDays = (iso, d) => { const t = new Date(iso + 'T12:00:00'); t.setDate(t.getDate() + d); return t.toISOString().slice(0, 10); };
+const SHIP_DATE = ((CFG.presale && CFG.presale.launchAt) || '2026-12-29').slice(0, 10);
+const plusDays = (iso, d) => { const t = new Date(iso + 'T12:00:00'); t.setDate(t.getDate() + d); return localISO(t); };
 const guestOrders = () => { try { return JSON.parse(localStorage.getItem('orgo-guest-orders') || '[]'); } catch (e) { return []; } };
 const clearGuestOrders = () => { try { localStorage.removeItem('orgo-guest-orders'); } catch (e) {} };
 const newOrderId = () => 'ORG-' + (10600 + Math.floor(Math.random() * 89000));

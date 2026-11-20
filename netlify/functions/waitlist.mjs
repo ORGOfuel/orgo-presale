@@ -1,7 +1,7 @@
 /* =====================================================================
    POST /api/waitlist  — footer "Join" form (email + optional SMS)
    Adds/updates the person in Shopify → Customers with marketing consent and tags
-   (presale-waitlist, drop-12-20, sms-optin). Runs on Netlify (server side), so the
+   (presale-waitlist, drop-12-29, sms-optin). Runs on Netlify (server side), so the
    Admin API credentials never reach the browser.
 
    Netlify → Site configuration → Environment variables:
@@ -60,7 +60,7 @@ export default async (req) => {
   const wantsSms = !!b.sms && !!b.phone;
   const phone = wantsSms ? String(b.phone).replace(/[^\d+]/g, '') : '';
   const e164 = phone ? (phone.startsWith('+') ? phone : (phone.length === 10 ? '+1' + phone : '+' + phone)) : '';
-  const tags = ['presale-waitlist', 'drop-12-20', ...(process.env.WAITLIST_TAGS || '').split(',').map(s => s.trim()).filter(Boolean)];
+  const tags = ['presale-waitlist', 'drop-12-29', ...(process.env.WAITLIST_TAGS || '').split(',').map(s => s.trim()).filter(Boolean)];
   if (wantsSms) tags.push('sms-optin');
   if (b.source) tags.push(`source:${String(b.source).slice(0, 30).replace(/[^\w-]/g, '')}`);
 

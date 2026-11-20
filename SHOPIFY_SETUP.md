@@ -27,8 +27,8 @@ Give each product one option called **Pack size**, with the values **12** and **
 
 **Preorder settings, per variant:**
 - Track quantity **on**, and tick **"Continue selling when out of stock"**. This lets people buy before stock arrives. Alternatively, enter your real presale allocation as the stock count, so it sells out when the allocation is gone.
-- Every line already carries the note **"Preorder: Ships December 20"**, and this shows on the order. You can also add the same text to the product description.
-- In **Settings → Checkout**, you can add an order note so the confirmation email mentions the December 20 ship date.
+- Every line already carries the note **"Preorder: Ships December 29"**, and this shows on the order. You can also add the same text to the product description.
+- In **Settings → Checkout**, you can add an order note so the confirmation email mentions the December 29 ship date.
 
 Make sure the products are published to the **Headless** sales channel (step 2).
 
@@ -46,8 +46,8 @@ Make sure the products are published to the **Headless** sales channel (step 2).
   2. **After 1 order (from order 2 on):** a **fixed price** of $34.99 (12-pack) / $46.99 (24-pack). Use a fixed price, not "15% off": a percentage would be taken off the variant price, which is already the presale price.
 - The site reads the plan's last (ongoing) price for the "$34.99 from box 2" figures, and checkout charges box 1 at the variant price, so the store and the site always match.
 - **Shipping:** add a free shipping rate for all orders during the presale (Settings → Shipping and delivery). The site already shows "Free shipping on every preorder".
-- **At launch (12.20):** set Price = Compare-at ($41.49 / $55.99) and clear the compare-at. Existing presale subscribers keep their $34.99 / $46.99. New subscribers get your standard plan, e.g. 10%.
-- **When plans repeat:** set presale subscriptions so the next delivery is counted from **December 20** (the first ship date), not the order date. After launch, count from the order date.
+- **At launch (12.29):** set Price = Compare-at ($41.49 / $55.99) and clear the compare-at. Existing presale subscribers keep their $34.99 / $46.99. New subscribers get your standard plan, e.g. 10%.
+- **When plans repeat:** set presale subscriptions so the next delivery is counted from **December 29** (the first ship date), not the order date. After launch, count from the order date.
 
 ## 2. Get the Storefront token (public, safe in the browser)
 
@@ -73,7 +73,7 @@ The "Claim subscriber pricing" plans (every 2, 4 or 6 weeks) need a subscription
 
 - Create a plan group on each flavor product with delivery intervals of **2, 4 and 6 weeks** and your discount (the site currently advertises up to 10%). The site matches plans by their week count.
 - If no selling plans exist, the site still works: subscription lines go to checkout as a one-time purchase, so nobody is blocked.
-- **Presale caveat:** a subscription normally bills its first order right away and then counts from that date. Set the first renewal so it lines up with the December 20 ship, or keep subscriptions as one-time preorders until launch. Ask your subscription app's support how to delay the first renewal.
+- **Presale caveat:** a subscription normally bills its first order right away and then counts from that date. Set the first renewal so it lines up with the December 29 ship, or keep subscriptions as one-time preorders until launch. Ask your subscription app's support how to delay the first renewal.
 
 ## 4. Waitlist / newsletter form → Shopify customers
 
@@ -144,7 +144,7 @@ To change the questions, edit `survey.questions` in `config.js`. Set `survey.ena
 
 - [ ] `config.js` has the store domain and Storefront token; the site no longer shows the demo message.
 - [ ] All 5 handles resolve, and prices on the site match Shopify.
-- [ ] Place a test order with **Bogus Gateway** (Settings → Payments → test mode). Check that the order shows "Preorder: Ships December 20" and the survey answers.
+- [ ] Place a test order with **Bogus Gateway** (Settings → Payments → test mode). Check that the order shows "Preorder: Ships December 29" and the survey answers.
 - [ ] After the test checkout, return to the site: the cart is cleared and "Preorder confirmed!" shows.
 - [ ] The footer form creates a tagged customer in Shopify.
 - [ ] The account icon opens Shopify login.
@@ -152,7 +152,7 @@ To change the questions, edit `survey.questions` in `config.js`. Set `survey.ena
 
 ## Launch timing
 
-The countdown targets `presale.launchAt: '2026-12-20T00:00:00-05:00'` (midnight Eastern). Change it in `config.js` if you drop at a different time or zone. When it hits zero, the site switches to "live" wording automatically.
+The countdown targets `presale.launchAt: '2026-12-29T00:00:00-05:00'` (midnight Eastern). Change it in `config.js` if you drop at a different time or zone. When it hits zero, the site switches to "live" wording automatically.
 
 ## Testing without a store
 

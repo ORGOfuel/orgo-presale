@@ -126,9 +126,31 @@
   const FLAVORS = [['wild-berries', /berr/i], ['blood-orange', /orange/i], ['blue-pomegranate', /pomegranate/i], ['lemonade', /lemon/i], ['variety', /variety|mix/i]];
   const flavorOf = t => (FLAVORS.find(f => f[1].test(t)) || ['variety'])[0];
 
+  // Real subscription (Seal → Shopify subscription contract). Separate query so the profile still loads if it fails.
+  const SUBS = `query OrgoSubs {
+    customer { subscriptionContracts(first: 10) { nodes {
+      id status nextBillingDate createdAt
+      billingPolicy { interval intervalCount }
+      lines(first: 5) { nodes { name title variantTitle quantity } }
+    } } } }`;
+  const weeksOf = bp => { if (!bp) return 4; const n = +bp.intervalCount || 1; return bp.interval === 'WEEK' ? n : bp.interval === 'DAY' ? Math.round(n / 7) : bp.interval === 'MONTH' ? n * 4 : 4; };
+  async function loadSub() {
+    try {
+      const d = await gql(SUBS); const all = (d.customer && d.customer.subscriptionContracts && d.customer.subscriptionContracts.nodes) || [];
+      if (!all.length) return null;
+      const rank = c => c.status === 'ACTIVE' ? 0 : c.status === 'PAUSED' ? 1 : 2;
+      const c = all.slice().sort((x, y) => rank(x) - rank(y) || String(y.createdAt).localeCompare(String(x.createdAt)))[0];
+      const l = (c.lines && c.lines.nodes && c.lines.nodes[0]) || {}, txt = `${l.title || l.name || ''} ${l.variantTitle || ''}`;
+      return { flavor: flavorOf(txt), size: /24/.test(l.variantTitle || txt) ? 24 : 12, cad: weeksOf(c.billingPolicy),
+        status: c.status === 'ACTIVE' ? 'active' : c.status === 'PAUSED' ? 'paused' : 'cancelled',
+        next: c.nextBillingDate ? String(c.nextBillingDate).slice(0, 10) : null, fromShopify: true };
+    } catch (e) { console.warn('[ORGO] Could not read subscriptions', e); return undefined; }
+  }
+
   async function load() {
-    const d = await gql(CUSTOMER), c = d.customer, a = c.defaultAddress || {};
+    const [d, sub] = await Promise.all([gql(CUSTOMER), loadSub()]), c = d.customer, a = c.defaultAddress || {};
     return {
+      ...(sub !== undefined ? { sub } : {}),
       shopify: true,
       name: [c.firstName, c.lastName].filter(Boolean).join(' ') || 'Athlete',
       email: (c.emailAddress && c.emailAddress.emailAddress) || '',
