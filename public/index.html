@@ -17,8 +17,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Instrument+Sans:wdth,wght@75..100,400..700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
-<link rel="stylesheet" href="assets/css/site.css?v=164">
-<link rel="stylesheet" href="assets/css/presale.css?v=164">
+<link rel="stylesheet" href="assets/css/site.css?v=168">
+<link rel="stylesheet" href="assets/css/presale.css?v=168">
 <script>/* GLB meshes are Draco-compressed: load the decoder from jsDelivr */ self.ModelViewerElement = self.ModelViewerElement || {}; self.ModelViewerElement.dracoDecoderLocation = "https://cdn.jsdelivr.net/npm/three@0.172.0/examples/jsm/libs/draco/gltf/"; self.ModelViewerElement.minimumRenderScale = 1;</script>
 <script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/" } }</script>
 <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.3.0/dist/model-viewer.min.js"></script>
@@ -229,7 +229,7 @@
             <h2>Stock up with ORGO.</h2>
             <ul class="sbn-list">
               <li><span>Subscribers save <span class="js-pct">15</span>% on every box from box 2</span></li>
-              <li>Free shipping, delivered every 2, 4 or 6 weeks</li>
+              <li>Free shipping, delivered every 4 or 6 weeks</li>
               <li>The 24-pack is the lowest price per shot</li>
               <li>Swap flavors, change timing or cancel any time</li>
             </ul>
@@ -400,7 +400,7 @@
           <details><summary>Is ORGO right for everyone?</summary><p>ORGO is formulated for athletes and active individuals: anyone who trains, competes or stays on the move and wants an easy boost on top of their regular meals. It's a supplement, not a meal replacement. Check with a healthcare professional before use if you are pregnant, nursing, taking medication, managing a medical condition, or underage/a minor. Contains fish (tilapia). Keep out of reach of children.</p></details>
           <details><summary>How is it packaged?</summary><p>Each shot comes in a thin, flexible pouch with a tear notch at the top. Pouches ship in boxes of 12 or 24.</p></details>
           <details><summary>Can I mix flavors?</summary><p>The Variety box has all four flavors. With a subscription you can pick the Variety box or a single flavor.</p></details>
-          <details><summary>How does the subscription work?</summary><p>Choose a 12 or 24-pouch box and a delivery interval of 2, 4 or 6 weeks. Your first box ships December 20 at the presale price (<span class="js-p12">$36.99</span> or <span class="js-p24">$49.99</span>). From your second box on, you pay the subscriber price, <span class="js-s12">$34.99</span> or <span class="js-s24">$46.99</span> per box, for as long as you stay. Shipping is always free. Change your flavor, size or timing, or cancel, at any time.</p></details>
+          <details><summary>How does the subscription work?</summary><p>Choose a 12 or 24-pouch box and a delivery interval of 4 or 6 weeks. Your first box ships December 20 at the presale price (<span class="js-p12">$36.99</span> or <span class="js-p24">$49.99</span>). From your second box on, you pay the subscriber price, <span class="js-s12">$34.99</span> or <span class="js-s24">$46.99</span> per box, for as long as you stay, charged every 4 or 6 weeks counted from your order date. Shipping is always free. Change your flavor, size or timing, or cancel, at any time.</p></details>
           <details><summary>Where do you ship?</summary><p>Anywhere the athletes are. We ship worldwide, so wherever you train, race or play, your ORGO box can meet you there. Delivery times and any customs fees depend on your country and are shown at checkout.</p></details>
         </div>
       </div>
@@ -551,6 +551,11 @@
   </section>
 
   <!-- THANK YOU (order confirmation) -->
+  <!-- POLICIES (#policy-refund, -shipping, -subscription, -privacy, -terms, -contact) -->
+  <section data-page="policy" hidden>
+    <div class="wrap"><article class="pol" id="polBody"></article></div>
+  </section>
+
   <section data-page="thanks" hidden>
     <div class="wrap">
       <div class="ty-hero" id="tyHero">
@@ -625,8 +630,8 @@
     </div>
     <div><h4>Shop</h4><ul><li><a href="#shop">All flavors</a></li><li><a href="#flavor-variety">Variety box</a></li><li><a href="#subscribe">Refuel</a></li><li><a href="#profile">My account</a></li></ul></div>
     <div><h4>Learn</h4><ul><li><a href="#about">About ORGO</a></li><li><a href="#science">What's inside</a></li><li><a href="#science">FAQ</a></li></ul></div>
-    <div><h4>Policies</h4><ul id="footPolicies"><li><a href="#" data-policy="Refund policy">Refund policy</a></li><li><a href="#" data-policy="Privacy policy">Privacy policy</a></li><li><a href="#" data-policy="Terms of service">Terms of service</a></li><li><a href="#" data-policy="Shipping policy">Shipping policy</a></li><li><a href="#" data-policy="My privacy choices">My privacy choices</a></li><li><a href="#" data-policy="Authorized resale policy">Authorized resale policy</a></li></ul></div>
-    <div class="fine"><span>© 2026 ORGO</span><span><a href="mailto:community@orgofuel.com">community@orgofuel.com</a></span></div>
+    <div><h4>Policies</h4><ul id="footPolicies"><li><a href="#policy-refund">Refund policy</a></li><li><a href="#policy-shipping">Shipping policy</a></li><li><a href="#policy-subscription">Subscription policy</a></li><li><a href="#policy-privacy">Privacy policy</a></li><li><a href="#policy-terms">Terms of service</a></li><li><a href="#policy-contact">Contact</a></li></ul></div>
+    <div class="fine"><span class="fda-foot">*These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.</span><span>© 2026 ORGO</span><span><a href="mailto:community@orgofuel.com">community@orgofuel.com</a></span></div>
   </div>
 </footer>
 
@@ -654,12 +659,13 @@
 
 <div class="sub-tab" id="subTab"><a href="#subscribe" class="sub-tab-go" id="subTabGo">Subscribe &amp; save <span class="js-pmax">15</span>%</a><button type="button" class="sub-tab-x" id="subTabX" aria-label="Hide offer">×</button></div>
 
-<script src="assets/js/config.js?v=164"></script>
-<script src="assets/js/shopify.js?v=164"></script>
-<script src="assets/js/shopify-account.js?v=164"></script>
-<script src="assets/js/survey.js?v=164"></script>
-<script src="assets/js/presale.js?v=164"></script>
-<script src="assets/js/app.js?v=164"></script>
-<script type="module" src="assets/js/hero-boxes.js?v=164"></script>
+<script src="assets/js/config.js?v=168"></script>
+<script src="assets/js/shopify.js?v=168"></script>
+<script src="assets/js/shopify-account.js?v=168"></script>
+<script src="assets/js/survey.js?v=168"></script>
+<script src="assets/js/presale.js?v=168"></script>
+<script src="assets/js/policies.js?v=169"></script>
+<script src="assets/js/app.js?v=168"></script>
+<script type="module" src="assets/js/hero-boxes.js?v=168"></script>
 </body>
 </html>

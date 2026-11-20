@@ -28,7 +28,7 @@ function fillPrices() {
   const put = (sel, v) => $$(sel).forEach(e => { e.textContent = v; });
   put('.js-pct', pctMax()); put('.js-ppct', PRESALE_PCT); put('.js-r12', money(REG[12])); put('.js-r24', money(REG[24])); put('.js-p12', money(PRICE[12])); put('.js-p24', money(PRICE[24])); put('.js-s12', money(SUBP[12])); put('.js-s24', money(SUBP[24]));
 }
-const CAD = [2, 4, 6];
+const CAD = [4, 6];
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
@@ -95,6 +95,7 @@ function pouchHTML(f, cls = '') {
 /* ---------- state ---------- */
 let cart = [];
 try { cart = JSON.parse(localStorage.getItem('orgo-cart') || '[]'); } catch (e) { cart = []; }
+cart.forEach(l => { if (l.sub && ![4, 6].includes(l.cad)) l.cad = 4; });   // 2-week plan retired
 const save = () => { try { localStorage.setItem('orgo-cart', JSON.stringify(cart)); } catch (e) {} };
 let shopSize = 12;
 
@@ -372,7 +373,7 @@ function renderPDP(id) {
       <div class="buyrow">
         <div class="qty"><button data-q="-1" aria-label="Fewer">−</button><output class="num">${pd.qty}</output><button data-q="1" aria-label="More">+</button></div>
         <button class="btn btn-ink" id="pdpAdd">Preorder · ${money(now)}</button>
-      </div>
+      </div>${pd.sub ? `<p class="ar-note">Auto-renews: you pay ${money(PRICE[pd.size] * pd.qty)} today for box 1, then ${money(SUBP[pd.size] * pd.qty)} every ${pd.cad} weeks, counted from your order date, until you cancel. Change or cancel any time from your account before your next renewal.</p>` : ''}
       <dl class="specs" style="margin:0">
         <div><span>Volume</span><span>20 mL / pouch</span></div>
         <div><span>Pouch</span><span>4 mm flat · tear notch</span></div>
@@ -438,14 +439,14 @@ function buildSubStatic() {
   void hp;
   const tiles = [
     ['big photo dark', 'Race day, sorted.', 'One squeeze before the gun, one after the line.<br class="cap-br"> Nothing else to think about.', 'linear-gradient(160deg, #5a34d6, #e8386d)', [], 'assets/img/race-day.jpg', 'Sprinters driving off the start line'],
-    ['deliv photo dark', 'Delivered before you run out.', 'A fresh box every 2, 4 or 6 weeks.', 'linear-gradient(150deg, #22c09b, #ffe04a)', [], 'assets/img/delivered-2.jpg', 'Athlete holding a Lemonade ORGO pouch on the track'],
+    ['deliv photo dark', 'Delivered before you run out.', 'A fresh box every 4 or 6 weeks.', 'linear-gradient(150deg, #22c09b, #ffe04a)', [], 'assets/img/delivered-2.jpg', 'Athlete holding a Lemonade ORGO pouch on the track'],
     ['photo', 'Your flavor, your call.', 'Go Variety or stick with a favorite. Switch any time.', 'linear-gradient(150deg, #ff4d2e, #ffae3d)', [], 'assets/img/flavor-call-ice.jpg', 'Blue Pomegranate ORGO pouch on ice']
   ];
   $('#gallery').innerHTML = tiles.map(t => `<div class="tile ${t[0]}" style="--tbg:${t[3]}">
       ${t[5] ? `<img class="tile-img" src="${t[5]}" alt="${t[6] || ''}" loading="lazy">` : t[0] === 'deliv' ? '' : '<span class="img-tag">IMAGE PLACEHOLDER</span>'}
       ${t[4].map((p, k) => `<div class="tp" style="--l:${p[0]};--t:${p[1]};--r:${p[2]};--pw:${p[3]}"><div class="floaty" style="--d:${-k * 1.7}s">${pouchHTML(F[p[4]], 'idle')}</div></div>`).join('')}
       <div class="tile-cap"><h3>${t[1]}</h3><p>${t[2]}</p></div></div>`).join('');
-  const flow = [['Pick a box', '12 or 24 pouches. Variety or one favorite flavor.'], ['Pick your timing', 'Every 2, 4 or 6 weeks, counted from Dec 20 when your first box ships.'], ['It ships free', 'We\'ll update you before each box ships.'], ['Adjust any time', 'Change flavor, size or timing, or cancel online.']];
+  const flow = [['Pick a box', '12 or 24 pouches. Variety or one favorite flavor.'], ['Pick your timing', 'Every 4 or 6 weeks, counted from the day you order.'], ['It ships free', 'We\'ll update you before each box ships.'], ['Adjust any time', 'Change flavor, size or timing, or cancel online.']];
   $('#flow').innerHTML = flow.map((f, i) => `<div style="--fa:${F[i].a};--fb:${F[i].b}"><span class="n">${i + 1}</span><h3>${f[0]}</h3><p>${f[1]}</p></div>`).join('');
   $$('[data-jump]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); $('#plans').scrollIntoView({ behavior: 'smooth', block: 'start' }); }));
 }
@@ -468,7 +469,7 @@ function renderSub() {
         <div class="po-seg" role="group" aria-label="Delivery interval">${CAD.map(c => `<button type="button" class="${c === sel.c ? 'on' : ''}" data-pc="${n}:${c}">Every ${c} wk</button>`).join('')}</div>
       </div>
       <button class="btn ${best ? 'btn-w' : 'btn-dark'}" data-plan="${n}">Claim my box</button>
-      <p class="pm-fine">First box ships Dec 20 · change or cancel any time · <a href="#flavor-${sel.f}">or ${money(PRICE[n])} one-time</a></p>
+      <p class="pm-fine">First box ships Dec 20 · then auto-renews at ${money(SUBP[n])} every ${sel.c} weeks until you cancel · cancel any time · <a href="#flavor-${sel.f}">or ${money(PRICE[n])} one-time</a></p>
     </div>`; }).join('');
   sbCad = sbSel[24].c;
   const y = n => money((REG[n] - SUBP[n]) * 52 / sbCad);
@@ -476,7 +477,7 @@ function renderSub() {
     <tr><td>12-pouch box</td><td>${money(REG[12])}</td><td class="sub">${money(SUBP[12])}</td></tr>
     <tr><td>24-pouch box</td><td>${money(REG[24])}</td><td class="sub">${money(SUBP[24])}</td></tr>
     <tr><td>Price per shot</td><td>${money(REG[24] / 24)} – ${money(REG[12] / 12)}</td><td class="sub">${money(SUBP[24] / 24)} – ${money(SUBP[12] / 12)}</td></tr>
-    <tr><td>Shipping</td><td>Free over $60</td><td class="sub">Always free</td></tr>
+    <tr><td>Shipping</td><td>Free on preorders</td><td class="sub">Always free</td></tr>
     <tr><td>Yearly savings (24-pouch, every ${sbCad} wk)</td><td class="no">—</td><td class="sub">${y(24)}</td></tr>
     <tr><td>Change or cancel online</td><td class="no">—</td><td class="sub yes">Yes</td></tr>
     <tr><td>Early access to new flavors</td><td class="no">—</td><td class="sub yes">Yes</td></tr></tbody>`;
@@ -600,6 +601,7 @@ function renderCart() {
       <div class="tot"><span>Total</span><span>${money(sub + ship)}</span></div>
       <button class="btn btn-ink" id="checkout">Claim my preorder</button>
       <p class="note" id="coNote">${ship ? `Add ${money(60 - sub)} more for free shipping.` : `Free shipping on every preorder · you save ${money(cart.reduce((a, l) => a + REG[l.size] * l.qty, 0) - sub)}`}</p>
+      ${cart.some(l => l.sub) ? `<p class="ar-note ar-cart">By checking out with a subscription, you agree it auto-renews: you'll be charged the price shown above on the schedule you picked, counted from your order date, until you cancel. Cancel any time from your account before your next renewal.</p>` : ''}
       <p class="ps-cart-note"><b>Preorder · ${SHIP_NOTE}.</b> Secure checkout by Shopify. Final shipping &amp; tax at checkout.</p>`;
     $('#checkout').onclick = e => startCheckout(e.currentTarget);
   }
@@ -615,8 +617,16 @@ addEventListener('keydown', e => { if (e.key === 'Escape') closeCart(); });
 let tt; function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('show'), 2200); }
 
 /* Policy links: add each page URL here when ready. Empty ones show a short note instead of navigating. */
-const POLICY_LINKS = { 'Refund policy': '', 'Privacy policy': '', 'Terms of service': '', 'Shipping policy': '', 'My privacy choices': '', 'Authorized resale policy': '' };
-$$('[data-policy]').forEach(a => { const u = POLICY_LINKS[a.dataset.policy]; if (u) { a.href = u; a.target = '_blank'; a.rel = 'noopener'; } else a.addEventListener('click', e => { e.preventDefault(); toast(`${a.dataset.policy} coming soon`); }); });
+/* Policy pages: text lives in assets/js/policies.js, shown at #policy-<name>. */
+const POL_ORDER = [['refund', 'Refunds'], ['shipping', 'Shipping'], ['subscription', 'Subscriptions'], ['privacy', 'Privacy'], ['terms', 'Terms'], ['contact', 'Contact']];
+function renderPolicy(id) {
+  const P = window.ORGO_POLICIES || {}, p = P[id] || P.refund;
+  if (!p) return;
+  $('#polBody').innerHTML = `<span class="eyebrow">ORGO · Policies</span><h1>${p.title}</h1>
+    <nav class="pol-nav" aria-label="Policies">${POL_ORDER.filter(([k]) => P[k]).map(([k, n]) => `<a href="#policy-${k}"${P[k] === p ? ' class="on" aria-current="page"' : ''}>${n}</a>`).join('')}</nav>
+    <div class="pol-text">${p.html}</div>`;
+  document.title = `${p.title} · ORGO`;
+}
 $('#newsSms').addEventListener('change', e => { $('#smsBox').hidden = !e.target.checked; });
 $('#news').addEventListener('submit', async e => {
   e.preventDefault();
@@ -874,7 +884,7 @@ function renderMySub() {
     <div class="subc-edit" id="subEdit"${subEditing ? '' : ' hidden'}>
       <div class="se-row"><span class="eyebrow">Flavor</span><div class="se-opts">${F.concat([VARIETY]).map(x => `<button type="button" class="se-fl${x.id === sb.flavor ? ' on' : ''}" data-sef="${x.id}" style="--fa:${x.a};--fb:${x.b}" aria-label="${x.id === 'variety' ? 'Variety' : x.name}" title="${x.id === 'variety' ? 'Variety' : x.name}"></button>`).join('')}</div></div>
       <div class="se-row"><span class="eyebrow">Pack size</span><div class="se-opts">${[12, 24].map(n => `<button type="button" class="se-chip${n === sb.size ? ' on' : ''}" data-ses="${n}">${n} pouches · ${money(SUBP[n])}</button>`).join('')}</div></div>
-      <div class="se-row" id="seTiming"><span class="eyebrow">Delivery</span><div class="se-opts">${[2, 4, 6].map(n => `<button type="button" class="se-chip${n === sb.cad ? ' on' : ''}" data-sec="${n}">Every ${n} weeks</button>`).join('')}</div></div>
+      <div class="se-row" id="seTiming"><span class="eyebrow">Delivery</span><div class="se-opts">${CAD.map(n => `<button type="button" class="se-chip${n === sb.cad ? ' on' : ''}" data-sec="${n}">Every ${n} weeks</button>`).join('')}</div></div>
       <div class="se-foot"><button type="button" class="btn btn-ghost" data-subact="close">Done</button></div>
     </div>`;
   const portal = SUB_PORTAL();
@@ -1123,7 +1133,7 @@ $$('[data-open-cart]').forEach(b => b.addEventListener('click', closeMenu));
 
 /* ---------- SOCIAL LINKS ----------
    Paste each profile URL below when the accounts are ready. Empty links stay on the page and show a note instead of navigating. */
-const SOCIAL_LINKS = { instagram: '', tiktok: '', pinterest: '', facebook: '' };
+const SOCIAL_LINKS = { instagram: 'https://www.instagram.com/orgofuel', tiktok: 'https://www.tiktok.com/@orgofuel', pinterest: 'https://pin.it/1z8lQfi3u', facebook: 'https://www.facebook.com/share/1Mxvr32J9x/' };
 $$('[data-social]').forEach(a => {
   const url = SOCIAL_LINKS[a.dataset.social];
   if (url) a.href = url;
@@ -1226,11 +1236,13 @@ if (window.OrgoAccount && OrgoAccount.enabled) {
 }
 
 /* ---------- ROUTER ---------- */
+const POL_BASE_TITLE = document.title;
 function route() {
   let h = location.hash.slice(1) || 'home';
   let page = h, pid = null;
   if (h.startsWith('flavor-')) { page = 'product'; pid = h.slice(7); }
-  if (!['home', 'shop', 'product', 'subscribe', 'science', 'about', 'profile', 'thanks'].includes(page)) page = 'home';
+  let polId = null; if (h.startsWith('policy-')) { page = 'policy'; polId = h.slice(7); }
+  if (!['home', 'shop', 'product', 'subscribe', 'science', 'about', 'profile', 'thanks', 'policy'].includes(page)) page = 'home';
   curPid = pid;
   $$('[data-page]').forEach(s => { s.hidden = s.dataset.page !== page; });
   $$('[data-nav]').forEach(a => a.classList.toggle('on', a.dataset.nav === page || (page === 'product' && a.dataset.nav === 'shop')));
@@ -1241,6 +1253,8 @@ function route() {
   if (page === 'about') buildAbout();
   if (page === 'profile') renderProfile();
   if (page === 'thanks') renderThanks();
+  if (page === 'policy') renderPolicy(polId);
+  else if (/ · ORGO$/.test(document.title)) document.title = POL_BASE_TITLE;
   closeCart();
   window.scrollTo(0, 0);
   fillPrices();

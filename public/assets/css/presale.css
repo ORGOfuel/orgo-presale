@@ -460,3 +460,24 @@ input.is-bad, select.is-bad, textarea.is-bad { border-color: #e5484d !important;
 #spWrap { opacity: 0; transition: opacity .6s var(--ease, ease); }
 #spWrap.mv-ready { opacity: 1; }
 @media (prefers-reduced-motion: reduce) { #spWrap { transition: none; } }
+
+/* auto-renew disclosure */
+.ar-note { margin: 10px 0 0; font-size: .8rem; line-height: 1.5; color: var(--muted, #6b7088); max-width: 52ch; }
+.ar-cart { max-width: none; margin: 10px 0 0; }
+/* footer FDA line */
+.fine .fda-foot { flex-basis: 100%; order: -1; font-family: inherit; letter-spacing: 0; text-transform: none; }
+
+/* policy pages */
+.pol { max-width: 760px; margin: 0 auto; padding-block: clamp(28px, 5vw, 64px) clamp(64px, 8vw, 120px); }
+.pol h1 { font-family: var(--display); font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.05; letter-spacing: -.02em; margin: 10px 0 18px; }
+.pol-nav { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 28px; }
+.pol-nav a { padding: 7px 14px; border-radius: 999px; border: 1px solid var(--line); font-size: .86rem; font-weight: 600; color: var(--ink); text-decoration: none; background: #fff; }
+.pol-nav a.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+.pol-text { font-size: 1rem; line-height: 1.7; color: var(--ink); }
+.pol-text h3 { font-family: var(--display); font-size: 1.15rem; margin: 28px 0 6px; }
+.pol-text p { margin: 0 0 12px; }
+.pol-text ul { margin: 0 0 12px; padding-left: 1.2em; }
+.pol-text li { margin: 0 0 6px; }
+.pol-text a { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; }
+.pol-text .pol-eff { font: 500 .78rem/1.5 var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+@media (max-width: 640px) { .pol-nav { gap: 6px; } .pol-nav a { padding: 6px 11px; font-size: .8rem; } .pol-text { font-size: .96rem; } }

@@ -58,3 +58,70 @@
   for = "/assets/js/config.js"
   [headers.values]
     Cache-Control = "no-cache"
+
+# Visitors bounced here from the old Shopify store address (redirect theme keeps the path).
+# Send Shopify-style paths to the matching place on this one-page site.
+[[redirects]]
+  from = "/products/variety-pack"
+  to = "/#flavor-variety"
+  status = 301
+
+[[redirects]]
+  from = "/products/:handle"
+  to = "/#flavor-:handle"
+  status = 301
+
+[[redirects]]
+  from = "/collections/*"
+  to = "/#shop"
+  status = 301
+
+[[redirects]]
+  from = "/cart"
+  to = "/#shop"
+  status = 301
+
+[[redirects]]
+  from = "/account/*"
+  to = "/#profile"
+  status = 301
+
+[[redirects]]
+  from = "/account"
+  to = "/#profile"
+  status = 301
+
+[[redirects]]
+  from = "/policies/refund-policy"
+  to = "/#policy-refund"
+  status = 301
+
+[[redirects]]
+  from = "/policies/shipping-policy"
+  to = "/#policy-shipping"
+  status = 301
+
+[[redirects]]
+  from = "/policies/subscription-policy"
+  to = "/#policy-subscription"
+  status = 301
+
+[[redirects]]
+  from = "/policies/privacy-policy"
+  to = "/#policy-privacy"
+  status = 301
+
+[[redirects]]
+  from = "/policies/terms-of-service"
+  to = "/#policy-terms"
+  status = 301
+
+[[redirects]]
+  from = "/policies/contact-information"
+  to = "/#policy-contact"
+  status = 301
+
+[[redirects]]
+  from = "/pages/*"
+  to = "/"
+  status = 301
