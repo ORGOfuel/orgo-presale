@@ -647,6 +647,8 @@ $('#news').addEventListener('submit', async e => {
 /* ---------- PROFILE ---------- */
 let prof = null;
 try { prof = JSON.parse(localStorage.getItem('orgo-profile') || 'null'); } catch (e) { prof = null; }
+// With Shopify accounts on, the profile only ever comes from Shopify: drop any old on-site profile left in this browser
+if (window.OrgoAccount && OrgoAccount.enabled) { prof = null; try { localStorage.removeItem('orgo-profile'); } catch (e) {} }
 const saveProf = () => { if (prof && prof.shopify) return; try { prof ? localStorage.setItem('orgo-profile', JSON.stringify(prof)) : localStorage.removeItem('orgo-profile'); } catch (e) {} };
 const PICON = {
   drop: '<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11Z"/>',
