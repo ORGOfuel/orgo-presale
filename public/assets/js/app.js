@@ -1281,6 +1281,10 @@ addEventListener('hashchange', route);
 })();
 
 addEventListener('scroll', () => { $('#top').classList.toggle('scrolled', scrollY > 8); storyCalc(); }, { passive: true });
+// phone: tuck the floating menu/cart buttons away while scrolling down so they don't sit on content; bring them back on scroll up
+{ let lastY = scrollY; const ml = document.querySelector('.mob-left');
+  addEventListener('scroll', () => { const y = scrollY, d = y - lastY; if (Math.abs(d) < 6) return;
+    if (ml) ml.classList.toggle('mob-hide', d > 0 && y > 140); lastY = y; }, { passive: true }); }
 addEventListener('resize', () => { sizeFan(); storyCalc(); });
 renderCart();
 fillPrices();
