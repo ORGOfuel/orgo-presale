@@ -222,15 +222,17 @@ function setStoryFlavor(i) {
   $('#smName').textContent = f.name; $('#smNote').textContent = f.note;
 }
 setStoryFlavor(0);
+// phones: the browser bar hiding/showing changes innerHeight mid-scroll; use a height that only updates when the width changes
+let VH = innerHeight, VW = innerWidth;
 $$('.sl-item').forEach(el => el.addEventListener('click', () => {
-  const i = +el.dataset.i; const total = story.offsetHeight - innerHeight;
+  const i = +el.dataset.i; const total = story.offsetHeight - VH;
   window.scrollTo({ top: story.offsetTop + total * ((i + .3) / 4), behavior: 'smooth' });
 }));
 const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
 let cur = { ry: 0, rx: 0, y: 0, s: 1, p: 0 }, target = { ry: 0, rx: 0, y: 0, s: 1, p: 0 };
 function storyCalc() {
   if ($('[data-page="home"]').hidden) return;
-  const total = story.offsetHeight - innerHeight;
+  const total = story.offsetHeight - VH;
   const p = Math.min(1, Math.max(0, -story.getBoundingClientRect().top / total));
   const seg = Math.min(3, Math.floor(p * 4)); const t = p * 4 - seg;
   let idx = seg, flip = 0;
@@ -242,7 +244,7 @@ function storyCalc() {
   target.y = Math.sin(t * Math.PI) * -18;
   target.s = 1 - Math.sin(flip * Math.PI) * .08;
   // hero fan collapse
-  const hp = Math.min(1, Math.max(0, scrollY / (innerHeight * .9)));
+  const hp = Math.min(1, Math.max(0, scrollY / (VH * .9)));
   fan.style.setProperty('--hp', hp.toFixed(3));
   target.p = p;
 }
@@ -1130,8 +1132,8 @@ window.ORGO = { showConfirmation(order) { tyOrder = order; if (location.hash ===
 
 /* ---------- MOBILE MENU ---------- */
 $('.mm-logo').innerHTML = `<img src="${$('.logo-img').src}" alt="ORGO">`;
-const openMenu = () => { $('#mmenu').classList.add('open'); $('#mscrim').classList.add('open'); $('#mmenu').setAttribute('aria-hidden', 'false'); $('#menuBtn').setAttribute('aria-expanded', 'true'); };
-const closeMenu = () => { $('#mmenu').classList.remove('open'); $('#mscrim').classList.remove('open'); $('#mmenu').setAttribute('aria-hidden', 'true'); $('#menuBtn').setAttribute('aria-expanded', 'false'); };
+const openMenu = () => { const m = $('#mmenu'); clearTimeout(m._t); m.classList.add('show'); void m.offsetWidth; m.classList.add('open'); $('#mscrim').classList.add('open'); $('#mmenu').setAttribute('aria-hidden', 'false'); $('#menuBtn').setAttribute('aria-expanded', 'true'); };
+const closeMenu = () => { const m = $('#mmenu'); m.classList.remove('open'); clearTimeout(m._t); m._t = setTimeout(() => { if (!m.classList.contains('open')) m.classList.remove('show'); }, 520); $('#mscrim').classList.remove('open'); $('#mmenu').setAttribute('aria-hidden', 'true'); $('#menuBtn').setAttribute('aria-expanded', 'false'); };
 $('#menuBtn').addEventListener('click', openMenu);
 $('#menuClose').addEventListener('click', closeMenu);
 $('.mm-logo').addEventListener('click', () => { closeMenu(); if (location.hash === '#home' || !location.hash) window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }); });
@@ -1285,7 +1287,7 @@ addEventListener('scroll', () => { $('#top').classList.toggle('scrolled', scroll
 { let lastY = scrollY; const ml = document.querySelector('.mob-left');
   addEventListener('scroll', () => { const y = scrollY, d = y - lastY; if (Math.abs(d) < 6) return;
     if (ml) ml.classList.toggle('mob-hide', d > 0 && y > 140); lastY = y; }, { passive: true }); }
-addEventListener('resize', () => { sizeFan(); storyCalc(); });
+addEventListener('resize', () => { if (innerWidth === VW && Math.abs(innerHeight - VH) < 160) return; VW = innerWidth; VH = innerHeight; sizeFan(); storyCalc(); });
 renderCart();
 fillPrices();
 route();
